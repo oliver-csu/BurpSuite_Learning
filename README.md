@@ -4,7 +4,8 @@
 
 ### 发音的纠正
 
-[bɜ:p] [swiːt] 
+[bɜ:p] [swiːt]
+
 Burp   Suite
 
 ### 官网介绍
@@ -100,3 +101,70 @@ https://portswigger.net/web-security
 #### 问答社区
 
 https://forum.portswigger.net/
+
+## Burp Suite配置启动
+
+### Burp Suite程序下载
+
+#### Burp jar包
+
+推荐2021+，jar包版本，下载地址：https://portswigger.net/burp/releases
+
+#### JRE环境
+
+##### JDK类型
+
+推荐解压版(zip) 
+
+##### JDK版本
+
+推荐JDK11 (配合Burp 2021)
+
+下载镜像：https://repo.huaweicloud.com/java/jdk/
+
+#### JDK11环境变量配置
+
+| 变量       | 值 |
+|----------|---|
+| JAVA_HOME | JDK解压的根路径 |
+| PATH     | %JAVA_HOME%\bin  |
+
+#### 激活和汉化包
+
+激活软件下载地址: https://github.com/h3110w0r1d-y/BurpLoaderKeygen/releases
+
+汉化包地址: https://github.com/h3110w0r1d-y/BurpLoaderKeygen/releases/download/2.0/BurpLoaderKeygenCn.jar
+
+### Burp Suite启动激活
+
+#### 命令行方式启动
+
+burp_start.bat，内容：
+
+``` bat
+@echo off
+cmd /k "java -jar BurpLoaderKeygen.jar"
+```
+
+#### VBS启动
+
+```vbs
+set ws=WScript.CreateObject("WScript.Shell")
+ws.Run "burp_start.bat",0
+```
+
+### Burp Suite配置
+
+#### 汉化说明
+
+burp_cn_start.bat，内容为：
+
+```bat
+@echo off
+cmd /k "java -jar BurpLoaderKeygenCn.jar"
+```
+
+#### 其他配置
+
+* 字体大小；
+* 汉字乱码。
