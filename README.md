@@ -168,3 +168,31 @@ cmd /k "java -jar BurpLoaderKeygenCn.jar"
 
 * 字体大小；
 * 汉字乱码。
+
+## Burp Suite模块详解
+
+### Burp Suite界面布局
+
+参考手册：https://portswigger.net/burp/documentation/contents
+
+#### 界面总览
+
+![界面总览](./assets/20241104/fa894a74b30845069b0a6c40ba3c401e.png)
+
+#### 旧版对比
+
+![旧版对比](./assets/20241104/801220614cd547fcaeb438c658166b29.png)
+
+### Burp Suite菜单栏
+
+#### Burp
+
+![菜单栏-Burp](./assets/20241104/e1624d9ba9ec450996aeb2c02c1c94b1.png)
+
+1. 搜索内容；
+2. 配置库；
+3. 用户选项；
+4. Infiltrator；
+5. Clickbandit；
+6. Collaborator client。
+
