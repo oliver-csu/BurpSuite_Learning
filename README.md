@@ -625,3 +625,233 @@ https://portswigger.net/kb/issues
 * ZAP；
 * ......。
 
+旧版BP：
+
+![旧版](./assets/20241111/2cde38caf53541d59b5afdcb9a6ed36b.png)
+
+新版BP：
+
+* 爬行Crwal；
+* 审计Audit。
+
+![新版](./assets/20241111/ca42d2e7b799462b9aca46c970d44801.png)
+
+#### 核心内容
+
+| 内容  | 描述  |
+|---|---|
+| Scan(主动扫描)  | 给定地址，爬取内容，检测漏洞  |
+| Live task (被动扫描)  | 对经过Proxy、Repeater、Intruder的请求进行漏洞检测  |
+|   |   |
+| live passive crawl from proxy(all traffic)  | 来自Proxy的被动流量抓取  |
+| live audit from proxy(all traffic)  | 流量的实时审计  |
+
+#### 扫描类型
+
+* Actively Scan:主动扫描 = Crawl and audit 
+* Passively Scan:被动扫描 = Live audit
+
+##### 主动扫描
+
+方式:爬取所有链接，检测漏洞
+特点:发送大量请求
+使用场合:开发、测试环境
+针对漏洞:
+客户端的漏洞，如XSS 、HTTP头注入、操作重定向。 服务端的漏洞，如SQL注入、命令行注入、文件遍历。
+
+##### 被动扫描
+
+方式:只检测经过BP代理服务器的地址，不爬取 特点:发送有限请求
+使用场合:生产环境
+针对漏洞:
+提交的密码为未加密的明文。 不安全的cookie的属性，例如缺少HttpOnly和安全标志。 cookie的范围缺失。
+跨域脚本包含和站点引用泄露。
+表单值自动填充，尤其是密码。
+SSL保护的内容缓存。
+目录列表。
+提交密码后应答延迟。
+session令牌的不安全传输。 敏感信息泄露，例如内部IP地址、电子邮件地址、堆枝跟踪等信息泄露。 不安全的ViewState 的配置。
+错误或不规范的Content-Type指令。
+
+### 使用BP漏扫功能
+
+#### 主动扫描的类型
+
+Crawl 爬行(建立站点地图) 
+Audit 审计(扫描漏洞)
+
+Scan Configuration:爬行和审计的设置 
+Application login:账号密码
+Resouce pool:线程池设置
+
+![主动扫描](./assets/20241111/2c19d35145034736846014388fef716c.png)
+
+#### 爬行配置
+
+| 内容  | 翻译  | 作用             |
+|---|---|----------------|
+| Crwal Optimization  | 爬行的优化  | 最大链接深度；更快还是更完整 |
+| Crwal Limits  | 爬行最大限制  | 最大时间；最多链接；最大请求数     |
+| Login Functions  | 登录注册  | 登录操作:自动注册；用无效的用户名主动触发登录失败               |
+| Handling Application  | 错误处理  | 爬行过程中的错误处理，比如超时               |
+| Miscellaneous [ˌmɪsəˈleɪniəs]  | 杂项  | 杂项  |
+
+#### 审计配置
+
+| 内容  | 翻译  | 作用                                                                       |
+|---|---|--------------------------------------------------------------------------|
+| Audit Optimization  | 审计优化  | 扫描的速度和精确度                                                                |
+| Issues Reported  | 问题报告  | 报告哪些漏洞:根据扫描类型或者漏洞类型来过滤，默认全选                                              |
+| Handling Application Errors During Audit  | 审计过程出错的处理  | 比如连接失败和传输超时默认：如果一个插入点连续失败两次，就跳过，不再发送请求 (接口挂了) 如果连续两个插入点失败，跳过其他的插入点（网站挂了) |
+| Insertion Point Types  | 插入点的类型  | URL参数值、Body里面的参数值、Cookie值、参数名字、HTTP请求头、Body完整内容、 URL文件名、URL目录            |
+| Modifying Parameter Locations  | 插入点位置  | 替换，交叉检测                                                                  |
+| Ignored insertion Point  | 忽略的插入点  |                                                                   |
+| Frequentcly Occurring Insertion Points  | 插入点相同时  | 当大量的插入点结果没有区别的时候，更加高效地扫描。                                                                  |
+| Misc Insertion Point Options  | 杂项  | 一个插入点的最大请求数量                                                                  |
+| JavaScript Analysis  | JavaScript审计  |                                                                   |
+
+#### 主动扫描的类型
+
+Scan：输入URL或者URL右键 
+Live Task：从其他模块获取到流量
+
+Live Task:
+
+* Audit 不会爬行 
+* passive crawl 会爬行
+
+### 生成扫描报告
+
+![生成报告](./assets/20241113/e556f5a6feee4ac8b8244e54e2f153df.png)
+
+右键导出
+
+https://portswigger.net/burp/samplereport/burpscannersamplereport
+
+## Burp Repeater
+
+参考资料：https://portswigger.net/burp/documentation/desktop/tools/repeater
+
+### Repeater模块作用
+
+1. 发起HTTP请求，分析响应；
+2. 重放请求。
+
+举例：Spring漏洞
+
+![Spring漏洞](./assets/20241113/032c4259b992480abde89f8a3d8b0da8.png)
+
+### Repeater使用方法
+
+#### 内容来源
+
+1. 从其他模块发送(Ctrl +R ) 
+2. 手动填入
+
+## Burp Intruder
+
+参考资料：https://portswigger.net/burp/documentation/desktop/tools/intruder
+
+### Intruder模块作用与原理
+
+原理：对请求参数进行修改，分析响应内容，获得特征数据
+
+本质: 
+
+1. 自动化发起HTTP请求
+2. 基于现成字典或者生成字典
+
+用途：
+
+1. 猜测用户名、密码等；
+2. 寻找参数、目录等；
+3. 枚举商品ID、验证码等；
+4. 模糊测试(FUZZ) 。
+
+可替代工具: 
+
+* wfuzz(全部功能)
+* dirb(目录扫描)
+* hydra(暴破)
+
+### Intruder实现暴力破解
+
+#### 流程
+
+1. 从其他模块发送或者手动填写；
+2. 选择攻击模式 Attack type；
+3. 选择攻击字段 Positions；
+4. 设置payload；
+5. 其他设置(线程池等) ；
+6. 发起攻击；
+7. 查看结果。
+
+#### 攻击模式
+
+* Sniper 狙击手 
+* Battering ram 攻城锤 
+* Pitchfork 草叉
+* Cluster bomb 榴霰[xiàn]弹
+
+#### payload type
+
+| 类别  | 名称  | 描述  |
+|---|---|---|
+| Simple list  | 简单字典  | 添加、粘贴或者从文件读取字典，或者使用预定义的字典 |
+| Runtime file  | 运行时文件  | 运行时，Burp Intruder将读取文件的每一行作为一个Payload |
+| Custom iterator  | 自定义迭代器  | 这个是占位填充的一种方式，最多8位  |
+| Character substitution  | 字符替换  | 把字典里面相应的字符进行替换  |
+| Case modification  | 大小写修改  | 要不要保持原样的，要不要全部大写的，要不要全小写的，要不要驼峰命名的 |
+| Recrusvive grep  | 递归查找  | 用来提取相应数据的比如拿到PHPSESSIONID，拿到TOKEN 等等，可以通过格式匹配抓取到对应的字段值。 |
+| Illegal unicode  | 非法Unicode 编码  | 用于绕过正则表达式的过滤验证  |
+| Character blocks  | 字符块  | 比如生成100A，200个+号，300个数字1等等 |
+| numbers  | 数字组合  |   |
+| dates  | 日期组合  |   |
+| Brute forcer  | 暴力破解  | 暴力枚举，最后一位先固定，然后一个个改  |
+| Null payloads  | 空payload  | 不需要设置payload  |
+| Character frobber  | 字符frobber  | 依次修改指定字符串在每个字符位置的值，每次都是在原字 符上递增一个该字符的ASCII码。  |
+| Bit flipper  | Bit翻转  | 对预设的Payload原始值，按照比特位，依次进行修改  |
+| Username generator  | 用户名生成器  | 主要用于用户名和email帐号的自动生成  |
+| ECB block shuffler  | ECB加密块洗牌  | 基于ECB加密模式的Payload生成器  |
+| Extension-generated  | Burp Payload 生成插件  | 基于Burp插件来生成Payload值，需要安装插件  |
+| Copy other payload  | Payload复制  | 是将其他位置的参数复制到Payload位置上(比如密码要输入两遍)  |
+
+参考资料：https://portswigger.net/burp/documentation/desktop/tools/intruder/payloads/types
+
+#### Intruder其他攻击模式
+
+##### Battering ram 攻城锤
+
+所有字段的值相同，来自同一个字典
+
+##### Pitchfork 草叉
+
+从多个字典提取值，赋给多个字段，按顺序一一对应
+
+例如:
+
+* 100个用户名 
+* 50个密码 
+* 最终请求次数:50次
+
+##### Cluster bomb 榴霰弹
+
+所有字典全部交叉验证
+
+例如:
+
+* 100个用户名
+* 50个密码 
+* 最终请求次数:5000次
+
+### Intruder标记结果
+
+Grep Match
+
+![标记结果](./assets/20241113/74415c3e888e4b7baa9a54a8305c2ae3.png)
+
+### Intruder获得CSRF Token
+
+Grep Extract
+
+![获得CSRF Token](./assets/20241113/772bdd666de346bdba9b8ae5adb50dd2.png)
